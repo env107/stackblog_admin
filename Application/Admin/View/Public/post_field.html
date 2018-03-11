@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/plugin.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/field.js')}>"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<script>
+$(function(){
+     field.init();
+});
+   
+</script>
+<form action="<{:U('Fields/field')}>" method="post" class="definewidth m20">
+<input type="hidden" name="data[type]" value="<if condition="$data"><{$data['type']}><else/><{$type}></if>" />
+<input type="hidden" name="edit" value="<{$edit}>" />
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">字段名</td>
+        <td><input type="text" required class="form-control" style="width:30%" placeholder="填写字段名" name="data[fieldname]" value="<{$data['fieldname']}>" /></td>
+    </tr>
+    <tr>
+        <td class="tableleft">标识名</td>
+        <td><input type="text" required name="data[url]" class="form-control" style="width:30%"  placeholder="填写标识名，最好使用英文" value="<{$data['url']}>"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">是否为必填项</td>
+        <td>
+            <input type="radio" name="data[required]" value="1" <if condition="$data['required'] eq 1">checked</if>/> 必填
+            <input type="radio" name="data[required]" value="0" <if condition="$data['required'] eq 0">checked</if>/> 非必填
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tableleft">默认值</td>
+        <td><input type="text"  name="data[value]" class="form-control" style="width:30%" placeholder="填写默认值" value="<{$data['value']}>"/></td>
+    </tr>
+   
+    <tr>
+        <td class="tableleft">字段类型</td>
+        <td>
+            <select name="data[fieldtype]" class="form-control selecter"  id="field-select">
+                    <option value="text" <if condition="$data['fieldtype'] eq 'text'">selected</if>>文本</option>
+                    <!--<option value="supertext" >超文本[开发中]</option>-->
+                    <option value="textarea" <if condition="$data['fieldtype'] eq 'textarea'">selected</if>>文本域</option>
+                   <!-- <option value="select"  <if condition="$data['fieldtype'] eq 'select'">selected</if> >下拉选择框</option>-->
+                    <!-- <option value="upload" >文件上传[开发中]</option>-->
+                </select>
+        </td>
+    </tr>
+    
+    <tr id="tabbox">
+        <td class="tableleft ">选项</td>
+        <td>
+           
+                <div class="tab_item" data-tab="text"
+                   style="display:<if condition="$data and $data['fieldtype'] neq 'text'">none<else/>block</if>; "
+                >
+                    <div class="text-info htext">选择文本数据类型</div>
+                    <select name="data[item][text]" class="form-control selecter" >
+                        <option value="string" <if condition="$data['item'] eq 'string'">selected</if>>字符串</option> 
+                        <option value="number" <if condition="$data['item'] eq 'number'">selected</if>>数字</option> 
+                        <option value="integer" <if condition="$data['item'] eq 'integer'">selected</if>>整数</option> 
+                        <option value="mobile" <if condition="$data['item'] eq 'mobile'">selected</if>>手机号码</option>
+                        <option value="email" <if condition="$data['item'] eq 'email'">selected</if>>电子邮箱</option>     
+                    </select>
+                    
+                </div>
+
+                <div class="tab_item" data-tab="textarea"
+                   style="display:<if condition="$data and $data['fieldtype'] eq 'textarea'">block<else/>none</if>; "
+                >
+                    <div class="text-info htext">填写默认行数</div>
+                    <input type='number' name="data[item][textarea]" value="<if condition="$data"><{$data['item']}><else/>10</if>" class="form-control" />
+                    
+                </div>
+
+             
+
+                <div class="tab_item" data-tab="select" style="display:<if condition="$data and $data['fieldtype'] eq 'select'">block<else/>none</if>;">
+                    <div class="text-info htext">输入下拉项</div>
+                    <input type="text" id="select_add" value=""  placeholder="添加列表项" class="form-control" style="width:30%;display: inline-block;" />   
+                    <div class="text-info htext">输入下拉项的值(不填写默认使用输入下拉项)</div>
+                    <input type="text" id="select_add_value" value=""  placeholder="下拉项的值" class="form-control" style="width:30%;display: inline-block;" />   
+                    <button id="select_handle" class="btn btn-default">添加</button>
+                    <button id="select_delete" class="btn btn-danger">删除该项</button>
+                    <div class="select_row">
+                            <div class="text-info htext">预览</div>
+                            <select id="select_item" style="width:30%" class="form-control">
+                                <if condition="$data and $data['fieldtype'] eq 'select'">
+                                    <php>
+                                        $items = json_decode($data['item'],true);
+                                    </php>
+                                    <foreach name="items['value']" key="key" item="item">
+                                        <option value="<{$item}>" <if condition="$data['value'] eq $item">selected</if>><{$items['text'][$key]}>[value=<{$item}>]</option>         
+                                    </foreach>
+                                </if>
+                            </select>
+                             <if condition="$data and $data['fieldtype'] eq 'select'">
+                                <foreach name="items['value']" key="key" item="item">
+                                    <input type="hidden" name="data[item][select][value][]" data-itemid="<{$item}>" value="<{$item}>" />
+                                    <input type="hidden" name="data[item][select][text][]" data-itemid="<{$item}>" value="<{$items['text'][$key]}>" />
+                                </foreach>
+                             </if>
+                            
+                             <!--<input type="hidden" name="data[item][select][]" value="" />-->
+                    </div>
+                    
+                </div>
+                   <!--后续开发-->
+<!--
+                <div class="tab_item" data-tab="upload" style="display:<if condition="$data and $data['fieldtype'] eq 'upload'">block</else>none</if>;">
+                    <div class="text-info htext">输入上传数量</div>
+                    <input type="number" placeholder="限制上传数量" name="data[item][upload][upload_num]" value="5" class="form-control" style="width: 30%" />
+                    <div class="text-info htext">上传后缀名</div>
+                    <input type="text" placeholder="多个后缀名可用逗号隔开，不指定则使用默认的图片默认上传后缀" name="data[item][upload][upload_suffix]" value="jpg,gif,png,jpeg" class="form-control" style="width: 50%" />
+                </div>-->
+
+            
+            
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tableleft">排序</td>
+        <td><input type="number"  name="data[sort]" value="<if condition="$data"><{$data['sort']}><else/>0</if>" class="form-control" style="width:30%" placeholder="填写排序" /></td>
+    </tr>
+
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;
+            <a class="btn btn-success" href="<{:U('Fields/index')}>">返回列表</a>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

@@ -1,0 +1,286 @@
+
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>后台管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="<{:asset('assets/css/dpl-min.css')}>" rel="stylesheet" type="text/css" />
+    <link href="<{:asset('assets/css/bui-min.css')}>" rel="stylesheet" type="text/css" />
+    <link href="<{:asset('assets/css/main-min.css')}>" rel="stylesheet" type="text/css" />
+    <link href="<{:asset('css/style.css')}>" rel="stylesheet" type="text/css" />
+ </head>
+ <body>
+
+  <div class="header">
+    
+      <div class="dl-title">
+        <span>thinkcms管理系统</span>
+      </div>
+
+    <div class="dl-log">欢迎您，<span class="dl-log-user"><{:user('name')}></span><a href="<{:U('User/Logout')}>" title="退出系统" class="dl-log-quit">[退出]</a>
+    </div>
+  </div>
+   <div class="content">
+    <div class="dl-main-nav">
+      <div class="dl-inform"><div class="dl-inform-title"><s class="dl-inform-icon dl-up"></s></div></div>
+      <ul id="J_Nav"  class="nav-list ks-clear">
+        		<li class="nav-item dl-selected"><div class="nav-item-inner nav-home">系统管理</div></li>		<li class="nav-item dl-selected"><div class="nav-item-inner nav-order">内容管理</div></li>       
+      </ul>
+    </div>
+    <ul id="J_NavContent" class="dl-tab-conten">
+
+    </ul>
+
+    <style>
+    .tab-item-title{
+
+    }
+    .tab-item-close{
+      background-size: 100% !important;
+      background-position: center;
+      background:url('<{:asset('images/close_icon.png')}>') no-repeat;
+      top:8px;
+    }
+    .tab-item-close:hover{
+      background-size: 100% !important;
+      background-position: center;
+      background:url('<{:asset('images/close2_icon.png')}>') no-repeat;
+    }
+    .header {
+      background-color: #1B3160;
+      height: 40px;
+      line-height: 40px;
+      /* background: black; */
+      width: 100%;
+      overflow: hidden
+    }
+    .bui-nav-tab-item{
+      background: #fff;
+      width: 65px;
+      margin-right: 0px;
+      margin-left: 2px;
+      height:30px;
+      line-height: 30px;
+      margin-bottom: 2px;
+    }
+    .tab-nav-bar{
+
+    }
+    .tab-nav-bar{
+      height:32px;
+      background:#fff;
+    }
+    .tab-nav-wrapper{
+      background:white;
+      margin:0px;
+
+    }
+    .tab-nav-arrow{
+      background:white;
+      display:none;
+    }
+    .tab-nav-inner{
+      background:white;
+    }
+    .tab-nav-actived{
+      background:#D2D2D2;
+    }
+    .header, .dl-main-nav{
+      background:#222;
+    }
+
+    </style>
+   </div>
+  <script type="text/javascript" src="<{:asset('assets/js/jquery-1.8.1.min.js')}>"></script>
+  <script type="text/javascript" src="<{:asset('assets/js/bui-min.js')}>"></script>
+  <script type="text/javascript" src="<{:asset('assets/js/common/main-min.js')}>"></script>
+  <script type="text/javascript" src="<{:asset('assets/js/config-min.js')}>"></script>
+  <script>
+    BUI.use('common/main', function() {
+	var config = [{
+		id: '1',
+        homePage: '0',
+		menu: [{
+			text: '系统管理',
+			items: [
+                {
+				id: '0',
+				text: '网站设置',
+				href: '<{:U("Index/welcome")}>'
+			},
+            {
+				id: '1',
+				text: '用户管理',
+				href: '<{:U("Member/index")}>'
+			}, 
+      <if condition="isRoleUser()">
+      {
+				id: '2',
+				text: '修改资料',
+				href: '<{:U("Member/post",array("edit"=>user("id")))}>'
+			},
+      </if>
+      {
+				id: '3',
+				text: '网站设定',
+				href: '<{:U("Index/set",array("url"=>"webset"))}>'
+			},
+      <if condition="isSuperAdmin()">
+      {
+				id: '4',
+				text: '系统设定',
+				href: '<{:U("Index/set",array("url"=>"sysset"))}>'
+			},
+      </if>
+      ]
+		}]
+	},
+  {
+		id: '2',
+		// homePage: '1',
+		menu: [
+		    // {
+            //     text: '分类管理',
+            //     items: [{
+            //         id: '1',
+            //         text: '分类列表',
+            //         href: '<{:U("Category/index")}>'
+            //     },
+			//           ]
+		    // },
+        {
+                text: '新闻管理',
+                items: [{
+                    id: '3',
+                    text: '添加新闻',
+                    href: '<{:U("Article/post")}>',
+                },{
+                    id: '4',
+                    text: '新闻列表',
+                    href: '<{:U("Article/index")}>',
+                },
+                {
+                    id: '31',
+                    text: '添加新闻分类',
+                    href: '<{:U("Category/post",array("type"=>"article"))}>',
+                },{
+                    id: '41',
+                    text: '新闻分类列表',
+                    href: '<{:U("Category/index",array("type"=>"article"))}>'
+                },
+                {
+                    id: '42',
+                    text: '自定义字段',
+                    href: '<{:U("Article/field",array("type"=>"article"))}>'
+                },
+			          ]
+		    },
+        {
+                text: '产品管理',
+                items: [{
+                    id: '5',
+                    text: '添加产品',
+                    href: '<{:U("Product/post")}>',
+                },{
+                    id: '6',
+                    text: '产品列表',
+                    href: '<{:U("Product/index")}>'
+                },
+                {
+                    id: '51',
+                    text: '添加产品分类',
+                    href: '<{:U("Category/post",array("type"=>"product"))}>',
+                },{
+                    id: '61',
+                    text: '产品分类列表',
+                    href: '<{:U("Category/index",array("type"=>"product"))}>'
+                },
+                {
+                    id: '62',
+                    text: '自定义字段',
+                    href: '<{:U("Product/field",array("type"=>"product"))}>'
+                },
+			          ]
+		    },
+        {
+                text: '单页管理',
+                items: [{
+                    id: '7',
+                    text: '添加单页',
+                    href: '<{:U("Page/post")}>',
+                },{
+                    id: '8',
+                    text: '单页列表',
+                    href: '<{:U("Page/index")}>'
+                },{
+                    id: '51',
+                    text: '添加单页分类',
+                    href: '<{:U("Category/post",array("type"=>"page"))}>',
+                },{
+                    id: '61',
+                    text: '单页分类列表',
+                    href: '<{:U("Category/index",array("type"=>"page"))}>'
+                },{
+                    id: '82',
+                    text: '自定义字段',
+                    href: '<{:U("Page/field",array("type"=>"page"))}>'
+                },
+			          ]
+		    },
+        {
+                text: '幻灯片管理',
+                items: [{
+                    id: '9',
+                    text: '添加幻灯片',
+                    href: '<{:U("slide/post")}>',
+                },{
+                    id: '10',
+                    text: '幻灯片列表',
+                    href: '<{:U("slide/index")}>'
+                },{
+                    id: '91',
+                    text: '添加幻灯片分类',
+                    href: '<{:U("Category/post",array("type"=>"slide"))}>',
+                },{
+                    id: '101',
+                    text: '幻灯片分类列表',
+                    href: '<{:U("Category/index",array("type"=>"slide"))}>'
+                },
+			          ]
+		    },
+        {
+                text: '客户留言',
+                items: [{
+                    id: '11',
+                    text: '查看留言',
+                    href: '<{:U("words/index")}>',
+                },
+			          ]
+		    },
+            {
+                text: '字段管理',
+                items: [{
+                    id: '13',
+                    text: '字段列表',
+                    href: '<{:U("Fields/index")}>',
+                },
+			          ]
+		    },
+        
+    ]
+	},
+
+  
+  
+  ];
+	new PageUtil.MainPage({
+		modulesConfig: config
+	});
+});
+
+    $(function(){
+
+    })
+  </script>
+ </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/plugin.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/uploader.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/bootstrap-select/js/bootstrap-select.js')}>"></script>
+    <link rel="stylesheet" type="text/css" href="<{:asset('js/bootstrap-select/css/bootstrap-select.min.css')}>" />
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form action="<{:U('slide/post',array('edit'=>$edit))}>" method="post" class="definewidth m20">
+<input type="hidden" name="edit" value="<{$edit}>" />
+<input type="hidden" name="type" value="<{$type}>" />
+<table class="table table-bordered table-hover definewidth m10">
+
+    <tr>
+        <td width="10%" class="tableleft"><{$fieldText['title']}></td>
+        <td><input type="text" class="form-control" style="width:30%" placeholder="填写<{$fieldText['title']}>" name="data[title]"  value="<{$data['title']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft"><{$fieldText['url']}></td>
+        <td><input type="text" class="form-control" style="width:30%" placeholder="填写<{$fieldText['url']}>" name="data[urllink]"  value="<{$data['url']}>"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft"><{$fieldText['category']}></td>
+        <td>
+                <select name="data[cid]" class="form-control selecter"  id="cid">
+                    <option value="0" data-text="顶级分类">顶级分类</option>
+                    <{$category_select}>
+                </select>
+        </td>
+       
+    </tr>
+
+    <script>
+            $(function(){
+                uploader.init();
+                uploader.bind("image",function($uploader,data){
+                    var $container = $(".url-container");
+                    var html = '<div class="url-item" data-image="'+data.data.url+'"><span class="">图片地址:'+data.data.url+'</span><input type="text" name="data[url][]" value="" placeholder="对应幻灯片地址" class="form-control" style="width:50%;"/></div>';
+                    $container.append(html);
+                });
+                uploader.bind("image",function($uploader,data){
+                   $(".url-container .url-item:eq("+(data.index)+")").remove();
+                },'remove');
+                $('#cid').selectpicker('refresh');
+	            $('#cid').selectpicker('render');
+                <if condition="$edit and $data['cid'] neq 0">
+                $('#cid').selectpicker('val','<{$data["cid"]}>');
+                </if>
+            });
+        </script>
+    <tr>
+        
+        <td class="tableleft"><{$fieldText['gallery']}></td>
+        <td> 
+            <div class="uploader">
+                <div class="plugin">
+                    <div class="btn btn-default">上传</div>
+                    <input type="file" id="image" name="image" value="" />
+                </div>
+                <div class="plugin_container">
+                    <volist name="data[image]" id="image">
+
+                        <div class="plugin_item">
+                            <div class="plugin_remove">删除</div>
+                            <img src="<{:getThumbImage('view',$image['image'])}>" alt="" />
+                            <input type="hidden" name="data[image][]" value="<{$image['image']}>" />
+                        </div>
+                        
+                    </volist>
+
+ 
+                </div>
+            </div>
+
+        </td>
+    </tr>
+    <script type="text/html" id="item_tpl">
+         <div class="plugin_item">
+            <div class="plugin_remove">删除</div>
+            <img src="" alt=""  />
+            <input type="hidden" name="data[image][]" value="" />
+        </div>
+    </script>
+
+    <tr>
+        <td width="10%" class="tableleft"><{$fieldText['slide_url']}></td>
+        <td>
+            <div class="url-container">
+ <volist name="data[image]" id="image">
+                <div class="url-item">
+                    <span class="">图片地址:<{$image['image']}></span>
+                    <input type="text" name="data[url][]" value="<{$image['url']}>" placeholder="对应幻灯片地址" class="form-control" style="width:50%;"/>
+                </div>
+</volist>
+               
+
+            </div>
+            
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary" type="button">提交</button> &nbsp;&nbsp;
+            <a class="btn btn-success" href="<{:U('Slide/index')}>">返回列表</a>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/plugin.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/field.js')}>"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<script>
+$(function(){
+     field.init();
+});
+   
+</script>
+<form action="<{:U('Article/field')}>" method="post" class="definewidth m20">
+<input type="hidden" name="data[type]" value="<{$type}>" />
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">字段名</td>
+        <td><input type="text" required class="form-control" style="width:30%" placeholder="填写字段名" name="data[fieldname]" /></td>
+    </tr>
+    <tr>
+        <td class="tableleft">标识名</td>
+        <td><input type="text" required name="data[url]" class="form-control" style="width:30%"  placeholder="填写标识名，最好使用英文"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">是否为必填项</td>
+        <td>
+            <input type="radio" name="data[required]" value="1" <if condition="$data['required'] eq 0">checked</if>/> 必填
+            <input type="radio" name="data[required]" value="0" <if condition="$data['required'] eq 1">checked</if>/> 非必填
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tableleft">默认值</td>
+        <td><input type="text"  name="data[value]" class="form-control" style="width:30%" placeholder="填写默认值"/></td>
+    </tr>
+   
+    <tr>
+        <td class="tableleft">字段类型</td>
+        <td>
+            <select name="data[fieldtype]" class="form-control selecter"  id="field-select">
+                    <option value="text" >文本</option>
+                    <!--<option value="supertext" >超文本[开发中]</option>
+                    <option value="textarea" >文本域[开发中]</option>
+                    <option value="select" >下拉选择框[开发中]</option>
+                    <option value="upload" >文件上传[开发中]</option>-->
+                </select>
+        </td>
+    </tr>
+    
+    <tr id="tabbox">
+        <td class="tableleft ">选项</td>
+        <td>
+           
+                <div class="tab_item" data-tab="text">
+                    <div class="text-info htext">选择文本数据类型</div>
+                    <select name="data[item][text]" class="form-control selecter" >
+                        <option value="string">字符串</option> 
+                        <option value="number">数字</option> 
+                        <option value="integer">整数</option> 
+                        <option value="mobile">手机号码</option>
+                        <option value="email">电子邮箱</option>     
+                    </select>
+                    
+                </div>
+                <div class="tab_item" data-tab="select" style="display:none">
+                    <div class="text-info htext">输入下拉项</div>
+                    <input type="text" id="select_add" value=""  placeholder="添加列表项" class="form-control" style="width:30%;display: inline-block;" /> 
+                    <input type="hidden" name="data[item][select]" value="" />
+                    <button id="select_handle" class="btn btn-default">添加</button>
+                    <div class="select_row">
+                            <div class="text-info htext">预览</div>
+                            <select id="select_item" style="width:30%" class="form-control"></select>
+                    </div>
+                    
+                </div>
+                <div class="tab_item" data-tab="upload" style="display:none">
+                    <div class="text-info htext">输入上传数量</div>
+                    <input type="number" placeholder="限制上传数量" name="data[item][upload][upload_num]" value="5" class="form-control" style="width: 30%" />
+                    <div class="text-info htext">上传后缀名</div>
+                    <input type="text" placeholder="多个后缀名可用逗号隔开，不指定则使用默认的图片默认上传后缀" name="data[item][upload][upload_suffix]" value="jpg,gif,png,jpeg" class="form-control" style="width: 50%" />
+                </div>
+
+            
+            
+        </td>
+    </tr>
+
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;
+            <a class="btn btn-success" href="<{:U('Article/index')}>">返回列表</a>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

@@ -1,0 +1,81 @@
+
+<link href="<{:asset('css/welcome.css')}>" rel="stylesheet" type="text/css" />
+<div class="welcome_container">
+<div class="wel"><{:user('name')}>
+<php>
+$h=date('G');
+if ($h<11) echo '早上好';
+else if ($h<13) echo '中午好';
+else if ($h<17) echo '下午好';
+else echo '晚上好';
+</php>，欢迎使用 ValveCms 1.0 ！</div>
+
+<div class="time">
+您上次的登录时间是 <{:date("Y-m-d H:i:s",user('lasttime'))}>
+</div>
+
+<div class="home-menu">
+ <a href="<{:U('Index/clear')}>" class="clear" >清除缓存</a>
+ <a href="<{:U('Article/post')}>" class="add">添加新闻</a>
+ <a href="<{:U('Words/index')}>" class="map">留言管理</a>
+ <a href="<{:U('Index/set',array('url'=>'webset'))}>" class="set">网站设置</a>
+</div>
+
+
+<script>
+$(function(){
+	$('tr:even').css('background','#ddd')
+})
+</script>
+<table class="table" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+  <tr class="first">
+  <td colspan="2">统计信息</td>
+  </tr>
+  <tr>
+    <td width="100">文章</td>
+    <td><{$article}> 篇 分类(<{$articleCate}>)</td>
+  </tr>
+  <tr>
+    <td width="100">产品</td>
+    <td><{$product}> 个 分类(<{$productCate}>)</td>
+  </tr>
+  <tr>
+    <td width="100">单页</td>
+    <td><{$pages}> 页</td>
+  </tr>
+  <tr>
+    <td width="100">留言</td>
+    <td><{$words}> 个</td>
+  </tr>
+
+  <tr class="first">
+  <td colspan="2">ValveCms 1.0</td>
+  </tr>
+  <tr>
+    <td width="100">开发</td>
+    <td>肇庆尚诺文化传播有限公司</td>
+  </tr>
+  <tr>
+    <td width="100">作者</td>
+    <td>env107</td>
+  </tr>
+  <tr>
+    <td width="100">支持网站</td>
+    <td><a href="" target="_blank"></a></td>
+  </tr>
+  <tr>
+    <td width="100">联系qq</td>
+    <td><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=503586547&site=qq&menu=yes">503586547</a></td>
+  </tr>
+  <tr>
+    <td width="100">电子邮箱</td>
+    <td>
+      503586547@qq.com
+
+    </td>
+  </tr>
+  
+</table>
+
+</div>
+

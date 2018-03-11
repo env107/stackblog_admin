@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form action="<{:U('Member/post',array('edit'=>$edit))}>" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <input type="hidden" name="edit" value="<{$edit}>" />
+    <tr>
+        <td width="10%" class="tableleft">用户名</td>
+        <td><input type="text" class="form-control" style="width:30%" placeholder="填写用户名" <if condition="$edit neq 0">readonly disabled<else/>name="data[username]"</if> value="<{$data['username']}>"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">名称</td>
+        <td><input type="text" name="data[name]" class="form-control" style="width:30%" value="<{$data['name']}>" placeholder="填写名称"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">邮箱</td>
+        <td><input type="text" name="data[email]" class="form-control" style="width:30%" value="<{$data['email']}>"  placeholder="填写邮箱"/></td>
+    </tr>
+    <if condition="$canBlock && isRoleUser() neq true">
+        <tr>
+            <td class="tableleft">状态</td>
+            <td>
+                <input type="radio" name="data[block]" value="0" <if condition="$data['block'] eq 0">checked</if>/> 启用
+                <input type="radio" name="data[block]" value="1" <if condition="$data['block'] eq 1">checked</if>/> 禁用
+            </td>
+        </tr>
+    </if>
+
+    <if condition="$edit eq 0 or (isSuperAdmin() or (isRoleUser('admin') and ($edit eq user('id') or user('id') eq $data['creater'])))">
+        <tr>
+            <td class="tableleft">密码</td>
+            <td><input type="text" name="data[password]" class="form-control" style="width:30%" placeholder="<if condition="$edit">留空则不修改<else />填写密码</if>"/></td>
+        </tr>
+    </if>
+
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary" type="button">提交</button> &nbsp;&nbsp;<a class="btn btn-success" href="<{:U('member/index')}>">返回列表</a>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

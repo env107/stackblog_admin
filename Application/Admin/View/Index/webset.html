@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/plugin.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/uploader.js')}>"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form action="<{:U('Index/set')}>" method="post" class="definewidth m20">
+<input type="hidden" name="url" value="webset" />
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">站点名称</td>
+        <td><input type="text" name="data[name]" class="form-control" style="width:30%" placeholder="填写站点名称" value="<{$data['name']}>"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">站点标题</td>
+        <td><input type="text" name="data[title]" class="form-control" style="width:30%" value="<{$data['title']}>" placeholder="填写站点标题"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">站点域名</td>
+        <td><input type="text" name="data[domain]" class="form-control" style="width:30%" value="<{$data['domain']}>"  placeholder="填写站点域名"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">站点关键词</td>
+        <td><input type="text" name="data[keyword]" class="form-control" style="width:30%" value="<{$data['keyword']}>"  placeholder="填写站点关键词"/></td>
+    </tr>
+    <tr>
+        <td class="tableleft">站点描述</td>
+        <td>
+            <textarea class="form-control" style="width: 30%;resize: none;" rows="5" name="data[description]"><{$data['description']}></textarea>
+
+        </td>
+    </tr>
+    <tr>
+        <script>
+            $(function(){
+                uploader.init();
+            });
+        </script>
+        <td class="tableleft">网站图标</td>
+        <td> 
+            <div class="uploader"
+               data-count="3"
+            >
+                <div class="plugin">
+                    <div class="btn btn-default">上传</div>
+                    <input type="file" id="icon" name="icon" value="" />
+                </div>
+                <div class="plugin_container">
+                    <volist name="data[icon]" id="icon">
+                    <div class="plugin_item">
+                        <div class="plugin_remove">删除</div>
+                        <img src="<{:getThumbImage('view',$icon)}>" alt="" />
+                        <input type="hidden" name="data[icon][]" value="<{$icon}>" />
+                    </div>
+                    </volist>
+
+ 
+                </diiv>
+            </div>
+
+        </td>
+    </tr>
+
+    <include file="Public:custom_fields" />
+
+    <script type="text/html" id="item_tpl">
+         <div class="plugin_item">
+            <div class="plugin_remove">删除</div>
+            <img src="" alt=""  />
+            <input type="hidden" name="data[icon][]" value="" />
+        </div>
+    </script>
+
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary">保存网站设置</button>&nbsp;&nbsp;
+            <button type="button" class="btn btn-success" onclick="location.href='<{:U("Index/field",array("type"=>"web"))}>'">自定义字段</button> 
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

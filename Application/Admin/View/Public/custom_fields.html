@@ -1,0 +1,48 @@
+   <php>
+       $fields = M("fields")->order("sort desc")->where("type='".$type."'")->select();
+      
+   </php>
+   <if condition="$fields">
+        <php>
+   
+            if(!is_array($data['field'])){
+                $data['field'] = json_decode($data['field'],true);
+            }
+
+         
+        </php>
+         <volist name="fields" id="f">
+
+            <tr>
+            <td class="tableleft"><{$f['fieldname']}></td>
+                <td>
+                
+                        <if condition="$f['fieldtype'] eq 'text'">
+                            <php>
+                                $itype = 'text';
+                                if(in_array($f['item'],array('integer'))){
+                                    $itype = 'number';
+                                }else if(in_array($f['item'],array('email'))){
+                                    $itype = 'email';
+                                }
+                            </php>
+                            <input type="<{$itype}>" <if condition="$f['required']">required placeholder="必填"<else />placeholder="选填"</if> name="data[field][<{$f['type']}>][<{$f['url']}>]" class="form-control" style="width:30%" 
+                        value="<if condition="$edit"><if condition="isset($data['field'][$f['type']][$f['url']])"><{$data['field'][$f['type']][$f['url']]}><else/><{$f['value']}></if><else/><{$f['value']}></if>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][required]" value="<{$f['required']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][fieldtype]" value="<{$f['fieldtype']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][fieldname]" value="<{$f['fieldname']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][datatype]" value="<{$f['item']}>" />
+                        </if>
+
+                        <if condition="$f['fieldtype'] eq 'textarea'">
+                            <textarea rows="<{$f['item']}>" <if condition="$f['required']">required placeholder="必填"<else />placeholder="选填"</if> name="data[field][<{$f['type']}>][<{$f['url']}>]" class="form-control" style="width:50%;resize:none;"><if condition="$edit"><if condition="isset($data['field'][$f['type']][$f['url']])"><{$data['field'][$f['type']][$f['url']]}><else/><{$f['value']}></if><else/><{$f['value']}></if></textarea>
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][required]" value="<{$f['required']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][fieldtype]" value="<{$f['fieldtype']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][fieldname]" value="<{$f['fieldname']}>" />
+                            <input type="hidden" name="form[<{$f['type']}>][<{$f['url']}>][datatype]" value="<{$f['item']}>" />
+                        </if>
+                
+                </td>
+            </tr>
+         </volist>
+    </if>

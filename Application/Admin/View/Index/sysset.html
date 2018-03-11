@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/plugin.js')}>"></script>
+    <script type="text/javascript" src="<{:asset('js/uploader.js')}>"></script>
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form action="<{:U('Index/set')}>" method="post" class="definewidth m20">
+<input type="hidden" name="url" value="sysset" />
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">管理员列表每页记录数</td>
+        <td><input type="number" name="data[page_admin]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_admin']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">新闻列表每页记录数</td>
+        <td><input type="number" name="data[page_article]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_article']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">产品列表每页记录数</td>
+        <td><input type="number" name="data[page_product]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_product']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">单页列表每页记录数</td>
+        <td><input type="number" name="data[page_single]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_single']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">幻灯片列表每页记录数</td>
+        <td><input type="number" name="data[page_slide]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_slide']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">分类列表每页记录数</td>
+        <td><input type="number" name="data[page_category]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_category']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">留言列表每页记录数</td>
+        <td><input type="number" name="data[page_words]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['page_words']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">分页器页码个数</td>
+        <td><input type="number" name="data[pager_num]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['pager_num']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">图片缩略图宽度</td>
+        <td><input type="text" name="data[thumb_width]" class="form-control" style="width:30%" placeholder="填写数字，用逗号分隔可分成多种尺寸,最多生成5种" value="<{$data['thumb_width']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">文件最大上传个数</td>
+        <td><input type="number" name="data[uploader_max]" class="form-control" style="width:30%" placeholder="填写数字" value="<{$data['uploader_max']}>"/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">文件上传后缀设置</td>
+        <td><input type="text" name="data[uploader_stuffix]" class="form-control" style="width:50%" placeholder="填写后缀名，针对全局设定" value="<{$data['uploader_stuffix']}>"/></td>
+    </tr>
+
+ 
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button type="submit" class="btn btn-primary" type="button">保存系统设置</button> 
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

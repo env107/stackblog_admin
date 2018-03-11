@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <include file="Public/include" />
+    <script type="text/javascript" src="<{:asset('js/page.js')}>"></script>
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20"  method="get" onsubmit="return false;">      
+    幻灯片查询:
+    <input type="text" name="username" placeholder="幻灯片名称" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <a class="btn btn-primary" onclick="select()">查询</a>&nbsp;&nbsp; <a type="button" class="btn btn-success" href="<{:U('slide/post',array('type'=>'slide'))}>">新增幻灯片</a>
+</form>
+<table class="table table-bordered table-hover definewidth m10" id="datatable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>幻灯片名称</th>
+        <th>URL</th>
+        <th>分类</th>
+        <th>创建时间</th>
+        <th>修改时间</th>
+        <th>创建者</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+	    
+</table>
+<div class="pagebox"></div>
+</body>
+</html>
+<script>
+
+     var index = {};
+
+    function select(){
+        var value = $("#username").val();
+        if(value != ''){
+            index.title = value;
+        }else{
+            index = {};
+        }
+        
+        getPage(1);
+    }
+
+   
+
+  $(function(){
+        getPage(1);
+
+        //绑定编辑事件
+        $(document).on("click",'.edit',function(){
+            var $this = $(this);
+                var id = $this.data('id');
+                location.href = "<{:U('slide/Post')}>&edit="+id;
+                return true;
+         
+
+        });
+        //绑定删除事件
+        $(document).on("click",'.del',function(){
+
+            var $this = $(this);
+
+            layer.confirm("删除后不能恢复,你确定要删除么?",{title:"删除提示"},function(){
+                 var id = $this.data('id');
+                location.href = "<{:U('slide/delete')}>&edit="+id;
+                
+            });
+    
+            return true;
+
+        });
+    })
+    function  getPage(page) {
+        //每页显示的页码数量
+
+        var pagesize='<{$pagesize}>';
+
+        if(pagesize == ''){
+            pagesize = 15;
+        }
+
+        pagesize = parseInt(pagesize);
+        $.post("<{:U('slide/getList')}>", {
+            pagenum: page, //当前页码
+            pagesize: pagesize, //每页记录数
+            index:index
+        }, function (json) {
+            //删除元素
+            var $datatable = $("#datatable");
+            var column = $datatable.find("thead tr th").length;
+
+            $datatable.find("tr:not(thead tr)").remove();
+            
+            var d = $.parseJSON(json);
+            var total = d.total; 
+            if(total == 0){         
+              
+                $datatable.append("<tr><td colspan='"+column+"'><div style='text-align:center'>暂无数据</div></td></tr>");
+                return;
+            }
+
+            var html="";
+        
+            $.each(d.data, function (index, array) {
+
+                html +='<tr>';
+                html +='<td>'+array['id']+'</td>';
+                html +='<td>'+array['title']+'</td>';
+                html +='<td>'+array['url']+'</td>';
+                html +='<td>'+(array['category']!=null?array['category']['title']:"顶级分类")+'</td>';
+                html +='<td>'+(array['ctime'])+'</td>';
+                html +='<td>'+(array['ltime'])+'</td>';
+                html +='<td>'+(array['creater']==0?"超级管理员":(array['admin']!=null?array['admin']['name']:"未知"))+'</td>';
+                html +='<td>';
+
+                <if condition="isSuperAdmin()">
+                    html +='<a class="btn btn-default btn-xs edit" data-id="'+array['id']+'">编辑</a> <a class="btn btn-danger btn-xs del"  data-id="'+array['id']+'">删除</a>';
+                <else/>
+           
+                    html +='<a class="btn btn-default btn-xs edit" data-id="'+array['id']+'">编辑</a>';
+                    if(array['creater'] == '<{:user("id")}>'){
+                       html +=' <a class="btn btn-danger btn-xs del"  data-id="'+array['id']+'">删除</a>';
+                    }
+                  
+                </if>
+                html +='</td>';
+                html +='</tr>';
+                
+            });
+        
+            $datatable.append(html);
+
+            $(".pagebox").html(getPageView(pagesize, page, total)); //获取分页内容
+
+        });
+
+    }
+</script>
